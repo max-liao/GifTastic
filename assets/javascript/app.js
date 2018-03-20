@@ -30,17 +30,21 @@ $("#add-gif").on("click", function(event) {
     // "Enter" instead of clicking the button if desired
     event.preventDefault();
     var newtopic = $("#gif-input").val().trim();
-    topics.push(newtopic);
-
+    if (newtopic == ""){
+        // var temp = typeof(newtopic);
+        console.log("Empty String");
+    } else {
+        topics.push(newtopic);
+    }
     // The renderButtons function is called, rendering the list of gif buttons
     renderButtons();
 });  
 
-// function showgifs(pointer,empty) {
-function showgifs() {
-    // if (empty){
+function showgifs(pointer,empty) {
+// function showgifs() {
+    if (empty){
         $("#GIFS").empty("");
-    // }
+    }
     var topic = $(this).attr("data-name");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC";
     console.log(queryURL);
@@ -95,8 +99,9 @@ function stillanimate(){
 //   });
 
 // $(document).on("click", ".topic", function(){
-//     var point = this;
-//     console.log(this);
+//     var point = $(this).;
+//     // var temp = {"button": point};
+//     // console.log(this);
 //     console.log(point);
 //     showgifs(point,true);
 // });
