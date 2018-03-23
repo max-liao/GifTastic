@@ -11,7 +11,7 @@
     }
 
     h2 {
-      color: gray;
+      color: cadetblue;
       padding:10px;
       font-size: 28px;
     }
@@ -56,8 +56,8 @@
       text-align: center;
     }
 
-    button {
-      background: teal;
+    .topic {
+      background: lightseagreen;
       border: seagreen;
       color: whitesmoke;
       text-align: center;
@@ -68,6 +68,20 @@
       margin-right: 10px;
     }
 
+    .fav {
+      background: mediumpurple;
+      color: whitesmoke;
+      /* border: ; */
+    }
+
+    .downloadlink{
+      background: rgb(112, 178, 216);
+      color: rgb(237, 236, 245);
+    }
     input {
+      margin-bottom:10px;
+    }
+
+    .gif{
       margin-bottom:10px;
     }

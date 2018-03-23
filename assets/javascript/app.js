@@ -1,9 +1,11 @@
 // This code will run as soon as the page loads
 window.onload = function() {
+    
     console.log("Starting");
 };
 
 var numberofgifs = 10;
+var numberoffavs = 0;
 var topics = ["cat", "dog", "goldfish", "parrot", "turtle"];
 var currenttopic = "";
 
@@ -11,7 +13,6 @@ var currenttopic = "";
 function renderButtons() {
 
     $("#gif-view").empty("");
-
     // Loop through the array of topics, then generate buttons for each topic in the array
     for (i=0; i < topics.length;i++){
         // $("#gif-view").append('<button class = "topicbutton">'+ topics[i] + '</button>');
@@ -40,43 +41,106 @@ $("#add-gif").on("click", function(event) {
     renderButtons();
 });  
 
-function showgifs(pointer,empty) {
-// function showgifs() {
+
+$("#add-more-gif").on("click", function(event) {
+    console.log("Add more Gifs clicked");
+    showgifs(false, currenttopic, 10);
+});
+
+$("#OMDB").on("click", function(event) {
+    console.log("OMDB clicked");
+    $("#GIFS").empty("");
+    
+    var queryURL = "https://www.omdbapi.com/?t=" + currenttopic + "&y=&plot=short&apikey=trilogy";
+    console.log(queryURL);
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+        console.log(response.Poster);
+        var b = $("<img>");
+        b.attr("src", response.Poster);
+        // $("#GIFS").append("<img href=" + response.Poster + "</img>");
+        $("#GIFS").append(b);
+    });
+    // showgifs(false, currenttopic);
+});
+
+$(document).on("click", ".fav", function(){
+    console.log("Add to favorites");
+
+    // showgifs(0,currenttopic,1);
+    // var gifurl = $(this).attr("url");
+    // console.log(gifurl);
+    // $("#Favorites").append();
+    var stillimageUrl = $(this).attr("stillurl");
+    var animateimageUrl = $(this).attr("animateurl");
+
+    var b = $("<img>");
+    b.addClass("gif");
+    b.attr("src", stillimageUrl);
+    b.attr("stillurl", stillimageUrl);
+    b.attr("animateurl", animateimageUrl);
+    b.attr("alt", "gifurl");
+    b.attr("gifstate", "still");
+    $("#Favorites").append(b);
+});
+
+function showgifs(empty, topic, total) {
     if (empty){
         $("#GIFS").empty("");
     }
-    var topic = $(this).attr("data-name");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC";
-    console.log(queryURL);
+    // var topic = $(this).attr("data-name");
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC" +"&limit=" + total;
+    // console.log(queryURL);
 
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function(response) {
+        // console.log(response);
     // Loop through the array of topics, then generate buttons for each topic in the array
-    for (i= 0; i<numberofgifs; i++){
+    for (i= 0; i<total; i++){
         // $("#gif-view").append('<button class = "topicbutton">'+ topics[i] + '</button>');
         var stillimageUrl = response.data[i].images.original_still.url;
         var animateimageUrl = response.data[i].images.original.url;
         
+        
         //create image tag to insert url
+        var dataname = $(this).attr("data-name");
+
         var b = $("<img>");
-        var p = "<p> Rating: " + response.data[i].rating + "</p>";
         b.addClass("gif");
-        b.attr("data-name", $(this).attr("data-name"));
+        b.attr("data-name", dataname);
         b.attr("src", stillimageUrl);
         b.attr("stillurl", stillimageUrl);
         b.attr("animateurl", animateimageUrl);
         b.attr("alt", "gifurl");
         b.attr("gifstate", "still");
         $("#GIFS").prepend(b);
+
+        var download = "<a href=" + animateimageUrl + " download> <button class='downloadlink'> Download this GIF </button>" + "</a>";
+        var favs = "<button class='fav' animateurl=" + animateimageUrl + " stillurl=" + stillimageUrl + "> Add to Favorites </button>";
+    
+        // var favs = $("<button>");
+        // favs.addClass("fav");
+        // favs.text("Add to Favorites")
+        // favs.attr("data-name", $(this).attr("data-name"));
+        
+
+        var p = "<p> Title: " + response.data[i].title + "<br>Rating: " + response.data[i].rating + 
+        "<br>" + favs + "<br>" + download + "</p>";
+        
         $("#GIFS").prepend(p);
      }
     });
 }
 
+
 function stillanimate(){
     var state = $(this).attr("gifstate");
+    // console.log(state);
     if (state == "still"){
         var animateurl = $(this).attr("animateurl");
         $(this).attr("src", animateurl);
@@ -90,7 +154,7 @@ function stillanimate(){
 // $(function(){
 //     $('img').each(function(e){
 //       var src = $(e).attr('src');
-//       $(e).hover(function(){
+//       $(e).hover(function(){ 
 //         $(this).attr('src', src.replace('.gif', '_anim.gif'));
 //       }, function(){
 //         $(this).attr('src', src);
@@ -98,14 +162,11 @@ function stillanimate(){
 //     });
 //   });
 
-// $(document).on("click", ".topic", function(){
-//     var point = $(this).;
-//     // var temp = {"button": point};
-//     // console.log(this);
-//     console.log(point);
-//     showgifs(point,true);
-// });
-$(document).on("click", ".topic", showgifs);
+$(document).on("click", ".topic", function(){
+    currenttopic = $(this).attr("data-name");
+    showgifs(true, currenttopic, 10);
+});
+// $(document).on("click", ".topic", showgifs);
 $(document).on("click", ".gif", stillanimate);
 
 renderButtons();
