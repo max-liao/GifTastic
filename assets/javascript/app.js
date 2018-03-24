@@ -1,7 +1,7 @@
 // Variables
 var numberofgifs = 10;
 var numberoffavs = 0;
-var topics = ["cat", "dog", "goldfish", "parrot", "turtle"];
+var topics = ["cat", "dog", "fish", "parrot", "bear"];
 var currenttopic = "";
 var stillArray = [];
 var animateArray = [];
@@ -224,9 +224,13 @@ function showgifs(empty, topic, total) {
         var stillimageUrl = response.data[i].images.original_still.url;
         var animateimageUrl = response.data[i].images.original.url;
         
-        //create image tag to insert url
         var dataname = $(this).attr("data-name");
 
+        var rating = "<p> Rating: " + response.data[i].rating +  "</p><br><br>";
+        $("#GIFS").prepend(rating);
+
+
+        //create image tag to insert url
         var b = $("<img>");
         b.addClass("gif");
         b.attr("data-name", dataname);
@@ -235,21 +239,26 @@ function showgifs(empty, topic, total) {
         b.attr("animateurl", animateimageUrl);
         b.attr("alt", "gifurl");
         b.attr("gifstate", "still");
+
+        var rating = "<p> Rating: " + response.data[i].rating +  "</p>";
+        console.log(rating);
+        b.append(rating);
+        
         $("#GIFS").prepend(b);
 
-        var download = "<a href=" + animateimageUrl + " download> <button class='downloadlink'> Download this GIF </button> </a>";
+        var download = "<a href=" + animateimageUrl + " download='new-image-name.jpg'> <button class='downloadlink'>Download this GIF</button></a>";
         var favs = "<button class='fav' animateurl=" + animateimageUrl + " stillurl=" + stillimageUrl + "> Add to Favorites </button>";
     
+        // console.log(download);
         // var favs = $("<button>");
         // favs.addClass("fav");
         // favs.text("Add to Favorites")
         // favs.attr("data-name", $(this).attr("data-name"));
         
+        var p = "<h3>" + response.data[i].title + "<br> <br>" + favs + "<br></h3>" + download + "<br><br>";
 
-        var p = "<p> Title: " + response.data[i].title + "<br>Rating: " + response.data[i].rating + 
-        "<br>" + favs + "<br>" + download + "</p>";
-        
         $("#GIFS").prepend(p);
+
      }
     });
 }
