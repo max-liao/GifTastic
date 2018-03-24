@@ -8,6 +8,7 @@
     <title>GifTastic</title>
 
     <!-- Local css -->
+    <link href="assets\css\reset.css" rel="stylesheet" href="reset.css">
     <link href="assets\css\style.css" rel="stylesheet" type="text/css">
 
   </head>
@@ -23,18 +24,29 @@
           <label for="gif-input">Gifs Bro!</label>
           <input type="text" id="gif-input">
           <br>
-
           <!-- Button triggers new gif to be added -->
           <input id="add-gif" type="submit" value="Add a Gif Topic">
       </form>
-          <!-- Button triggers 10 gifs to be added -->
-          <input id="add-more-gif" type="submit" value="Show 10 more Gifs">
-          <br>
+      
+      <!-- Button triggers 10 gifs to be added -->
+      <input id="add-more-gif" type="submit" value="Show 10 more Gifs">
+      <br>
+
+      <form id="poster-form">
           <!-- Button triggers OMDB image search -->
+          <label for="poster-input">Movie Poster!</label>
+          <input type="text" id="OMDB-input">
+          <br>
           <input id="OMDB" type="submit" value="OMDB Movie Poster Search">
+      </form>
           
-      <div id="Favorites"><h2>Favorites</h2> </div>
-      <h2> Gifs </h2>
+      <h2>Favorites</h2> 
+      <div id="Favorites"></div>
+        <!-- Button triggers OMDB image search -->
+        <input id="clearfavs" type="submit" value="Clear Favorites">
+          
+
+      <h2> Display </h2>
       <div id="GIFS"></div>
 
     <!-- jQuery -->
